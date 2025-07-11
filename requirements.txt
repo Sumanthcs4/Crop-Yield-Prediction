@@ -6,3 +6,10 @@ seaborn
 scikit-learn 
 xgboost
 mlflow
+pymongo
+certifi
+
+
+
+
+###-e .
