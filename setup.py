@@ -26,7 +26,7 @@ setup(
     name = "Crop-Yield-Prediction",
     version = "0.0.1",
     author= "Sumanth C S",
-    Email = "ssumanth510@gmail.com",
+    email = "ssumanth510@gmail.com",
     packages= find_packages(),
     install_requires = get_requirements(),
 )
