@@ -8,7 +8,7 @@ xgboost
 mlflow
 pymongo
 certifi
-
+pymongo[srv] == 3.6
 
 
 
