@@ -17,7 +17,7 @@ TRAIN_FILE_NAME: str = "train.csv"
 VALIDATION_FILE_NAME: str = "validation.csv"
 TEST_FILE_NAME: str = "test.csv"
 
-
+SCHEMA_FILE_PATH: str = os.path.join("data_schema", "schema.yaml")
 
 """data ingestion related constants start with 'DATA_INGESTION_'var names"""
 
@@ -34,3 +34,17 @@ DATA_INGESTION_INGESTED_DIR: str = "ingested"
 DATA_INGESTION_TRAIN_RATIO: float = 0.6
 DATA_INGESTION_VALIDATION_RATIO: float = 0.2
 DATA_INGESTION_TEST_RATIO: float = 0.2
+
+"""
+Data Validation related contsant start with DATA_VALIDATION VAR NAME
+    
+"""
+
+DATA_VALIDATION_DIR_NAME: str = "data_validation"
+DATA_VALIDATION_VALID_DIR: str = "validated"
+DATA_VALIDATION_INVALID_DIR: str = "invalid"
+DATA_VALIDATION_DRIFT_REPORT_DIR: str = "drift_report"
+DATA_VALIDATION_DRIFT_REPORT_FILE_NAME: str = "report.yaml"
+#PREPROCESSING_OBJECT_FILE_NAME:str = "preprocessing.pkl"
+
+ 

@@ -1,0 +1,21 @@
+columns:
+  Area: object
+  Item: object
+  Year: int
+  hg/ha_yield: float
+  average_rain_fall_mm_per_year: float
+  pesticides_tonnes: float
+  avg_temp: float
+
+numerical_columns:
+  - Year
+  - hg/ha_yield
+  - average_rain_fall_mm_per_year
+  - pesticides_tonnes
+  - avg_temp
+
+categorical_columns:
+  - Area
+  - Item
+
+target_column: hg/ha_yield
