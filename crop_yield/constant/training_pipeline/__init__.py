@@ -19,6 +19,9 @@ TEST_FILE_NAME: str = "test.csv"
 
 SCHEMA_FILE_PATH: str = os.path.join("data_schema", "schema.yaml")
 
+SAVED_MODEL_DIR: str = os.path.join("saved_models")
+MODEL_FILE_NAME = "model.pkl"
+
 """data ingestion related constants start with 'DATA_INGESTION_'var names"""
 
 # MongoDB settings
@@ -52,3 +55,17 @@ DATA_TRANSFORMATION_DIR_NAME = "data_transformation"
 DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR = "transformed"
 DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR = "preprocessing"
 PREPROCESSING_OBJECT_FILE_NAME = "preprocessing.pkl"
+
+
+"""
+Model Trainer related constants start with MODEL_TRAINER_
+"""
+
+MODEL_TRAINER_DIR_NAME: str = "model_trainer"
+MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"
+MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl"
+MODEL_TRAINER_EXPECTED_SCORE: float = 0.6
+MODEL_TRAINER_OVER_FITTING_UNDER_FITTING_THRESHOLD: float = 0.05
+
+
+

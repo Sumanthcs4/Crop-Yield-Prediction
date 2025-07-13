@@ -3,9 +3,10 @@ from crop_yield.components.data_validation import DataValidation
 from crop_yield.components.data_transformation import DataTransformation
 from crop_yield.exception.exception import CropYieldException
 from crop_yield.logging.logger import logging
-from crop_yield.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig, DataValidationConfig, DataTransformationConfig
+from crop_yield.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig
 from crop_yield.constant.training_pipeline import SCHEMA_FILE_PATH
 from crop_yield.utils.main_utils.utils import read_yaml_file
+from crop_yield.components.model_trainer import ModelTrainer
 import sys
 
 
@@ -47,7 +48,13 @@ if __name__ == '__main__':
 
         logging.info("Data Transformation completed successfully")
         print(data_transformation_artifact)
+        
+        logging.info("Model Training started")
+        model_trainer_config=ModelTrainerConfig(training_pipeline_config)
+        model_trainer=ModelTrainer(model_trainer_config=model_trainer_config,data_transformation_artifact=data_transformation_artifact)
+        model_trainer_artifact=model_trainer.initiate_model_trainer()
 
-
+        logging.info("Model Training artifact created")
+        logging.info(f"Model Trainer Artifact: {model_trainer_artifact}")
     except Exception as e:
         raise CropYieldException(e, sys)
