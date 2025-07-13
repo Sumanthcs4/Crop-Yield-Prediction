@@ -1,27 +1,20 @@
 import os
 import sys
 import numpy as np
+import mlflow
+import mlflow.sklearn
+
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 
-from crop_yield.entity.artifact_entity import DataTransformationArtifact, ModelTrainerArtifact
+from crop_yield.entity.artifact_entity import DataTransformationArtifact, ModelTrainerArtifact, RegressionMetricArtifact
 from crop_yield.exception.exception import CropYieldException
 from crop_yield.logging.logger import logging
-from crop_yield.entity.artifact_entity import (
-    DataTransformationArtifact,
-    ModelTrainerArtifact,
-    RegressionMetricArtifact
-)
 from crop_yield.entity.config_entity import ModelTrainerConfig
-from crop_yield.utils.main_utils.utils import (
-    save_object,
-    load_object,
-    load_numpy_array_data,
-    evaluate_models
-)
+from crop_yield.utils.main_utils.utils import save_object, load_object, load_numpy_array_data, evaluate_models
 from crop_yield.utils.ml_utils.model.estimator import CropYieldModel
 
 
@@ -30,6 +23,26 @@ class ModelTrainer:
         try:
             self.model_trainer_config = model_trainer_config
             self.data_transformation_artifact = data_transformation_artifact
+        except Exception as e:
+            raise CropYieldException(e, sys)
+
+    def track_mlflow(self, model, train_metric: RegressionMetricArtifact, test_metric: RegressionMetricArtifact):
+        try:
+            # Log model name
+            mlflow.log_param("model_name", type(model).__name__)
+
+            # Log evaluation metrics
+            mlflow.log_metric("train_r2_score", train_metric.r2_score)
+            mlflow.log_metric("train_rmse", train_metric.rmse)
+            mlflow.log_metric("train_mae", train_metric.mae)
+
+            mlflow.log_metric("test_r2_score", test_metric.r2_score)
+            mlflow.log_metric("test_rmse", test_metric.rmse)
+            mlflow.log_metric("test_mae", test_metric.mae)
+
+            # Log the model itself
+            mlflow.sklearn.log_model(model, "model")
+
         except Exception as e:
             raise CropYieldException(e, sys)
 
@@ -66,7 +79,7 @@ class ModelTrainer:
 
             param = {
                 "DecisionTree": {
-                    "max_depth": [5, 10, 20],
+                    "max_depth": [5, 10, 15],
                     "min_samples_split": [2, 5, 10]
                 },
                 "RandomForest": {
@@ -75,22 +88,23 @@ class ModelTrainer:
                 },
                 "XGBoost": {
                     "n_estimators": [100, 200],
-                    "learning_rate": [0.01, 0.1],
+                    "learning_rate": [0.03, 0.1],
                     "max_depth": [3, 6]
                 },
                 "LinearRegression": {}  # No hyperparameter tuning
             }
 
-            # Use validation set for evaluation
+            # Evaluate all models and get best
             model_report = evaluate_models(X_train, y_train, X_val, y_val, models, param)
-
-            # Select best model
             best_model_name = max(model_report, key=model_report.get)
             best_model = models[best_model_name]
             best_model.fit(X_train, y_train)
 
             # Evaluate metrics
             train_metric, test_metric = self.evaluate_regression_model(best_model, X_train, y_train, X_test, y_test)
+
+            # Track metrics and model with MLflow
+            self.track_mlflow(best_model, train_metric, test_metric)
 
             # Save model wrapped with preprocessor
             preprocessor = load_object(self.data_transformation_artifact.transformed_object_file_path)
@@ -109,7 +123,7 @@ class ModelTrainer:
 
         except Exception as e:
             raise CropYieldException(e, sys)
-    
+
     def initiate_model_trainer(self) -> ModelTrainerArtifact:
         try:
             train_arr = load_numpy_array_data(self.data_transformation_artifact.transformed_train_file_path)
@@ -124,4 +138,3 @@ class ModelTrainer:
 
         except Exception as e:
             raise CropYieldException(e, sys)
-
