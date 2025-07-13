@@ -9,13 +9,11 @@ columns:
 
 numerical_columns:
   - Year
-  - hg/ha_yield
   - average_rain_fall_mm_per_year
   - pesticides_tonnes
   - avg_temp
-
+  - Area           
 categorical_columns:
-  - Area
-  - Item
+  - Item            
 
 target_column: hg/ha_yield
