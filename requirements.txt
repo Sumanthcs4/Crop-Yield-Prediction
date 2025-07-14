@@ -6,10 +6,13 @@ seaborn
 scikit-learn 
 xgboost
 mlflow
-pymongo
+pymongo == 4.13.2
 certifi
-pymongo[srv] == 3.6
+pymongo[srv]
 pyaml
 dill
 xgboost
+dagshub
+fastapi
+uvicorn
 ###-e .

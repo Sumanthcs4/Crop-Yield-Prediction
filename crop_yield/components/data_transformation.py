@@ -72,10 +72,15 @@ class DataTransformation:
             input_feature_test_df = test_df.drop(columns=[TARGET_COLUMN], axis=1)
             target_feature_test_df = test_df[TARGET_COLUMN]
 
-            # Frequency encode 'Area'
+            # ✅ Frequency encode 'Area' and save area_freq_map
             area_freq_map = input_feature_train_df['Area'].value_counts().to_dict()
+            mean_freq = np.mean(list(area_freq_map.values()))
+
             for df in [input_feature_train_df, input_feature_val_df, input_feature_test_df]:
-                df['Area'] = df['Area'].map(area_freq_map)
+                df['Area'] = df['Area'].map(area_freq_map).fillna(mean_freq)
+
+            # ✅ Save the area_freq_map for use during inference
+            save_object("final_model/area_freq_map.pkl", area_freq_map)
 
             preprocessor = self.get_data_transformer_object(schema_config)
 

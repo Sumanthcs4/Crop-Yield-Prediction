@@ -16,6 +16,10 @@ from crop_yield.logging.logger import logging
 from crop_yield.entity.config_entity import ModelTrainerConfig
 from crop_yield.utils.main_utils.utils import save_object, load_object, load_numpy_array_data, evaluate_models
 from crop_yield.utils.ml_utils.model.estimator import CropYieldModel
+import dagshub
+
+# Initialize DagsHub + MLflow
+dagshub.init(repo_owner='Sumanthcs4', repo_name='Crop-Yield-Prediction', mlflow=True)
 
 
 class ModelTrainer:
@@ -28,20 +32,15 @@ class ModelTrainer:
 
     def track_mlflow(self, model, train_metric: RegressionMetricArtifact, test_metric: RegressionMetricArtifact):
         try:
-            # Log model name
             mlflow.log_param("model_name", type(model).__name__)
-
-            # Log evaluation metrics
             mlflow.log_metric("train_r2_score", train_metric.r2_score)
             mlflow.log_metric("train_rmse", train_metric.rmse)
             mlflow.log_metric("train_mae", train_metric.mae)
-
             mlflow.log_metric("test_r2_score", test_metric.r2_score)
             mlflow.log_metric("test_rmse", test_metric.rmse)
             mlflow.log_metric("test_mae", test_metric.mae)
 
-            # Log the model itself
-            mlflow.sklearn.log_model(model, "model")
+            #mlflow.sklearn.log_model(model, "model")
 
         except Exception as e:
             raise CropYieldException(e, sys)
@@ -94,19 +93,14 @@ class ModelTrainer:
                 "LinearRegression": {}  # No hyperparameter tuning
             }
 
-            # Evaluate all models and get best
             model_report = evaluate_models(X_train, y_train, X_val, y_val, models, param)
             best_model_name = max(model_report, key=model_report.get)
             best_model = models[best_model_name]
             best_model.fit(X_train, y_train)
 
-            # Evaluate metrics
             train_metric, test_metric = self.evaluate_regression_model(best_model, X_train, y_train, X_test, y_test)
 
-            # Track metrics and model with MLflow
-            self.track_mlflow(best_model, train_metric, test_metric)
-
-            # Save model wrapped with preprocessor
+            # ✅ Save model before logging to MLflow
             preprocessor = load_object(self.data_transformation_artifact.transformed_object_file_path)
             model_dir_path = os.path.dirname(self.model_trainer_config.trained_model_file_path)
             os.makedirs(model_dir_path, exist_ok=True)
@@ -114,6 +108,10 @@ class ModelTrainer:
             final_model = CropYieldModel(preprocessor=preprocessor, model=best_model)
             save_object(self.model_trainer_config.trained_model_file_path, final_model)
             save_object("final_model/model.pkl", best_model)
+            print(" Model saved to final_model/model.pkl")
+
+            # Track with MLflow
+            self.track_mlflow(best_model, train_metric, test_metric)
 
             return ModelTrainerArtifact(
                 trained_model_file_path=self.model_trainer_config.trained_model_file_path,
