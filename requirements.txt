@@ -15,4 +15,5 @@ xgboost
 dagshub
 fastapi
 uvicorn
+streamlit
 ###-e .
