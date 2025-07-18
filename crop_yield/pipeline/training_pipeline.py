@@ -13,6 +13,8 @@ from crop_yield.components.model_trainer import ModelTrainer
 from crop_yield.constant.training_pipeline import SCHEMA_FILE_PATH
 from crop_yield.utils.main_utils.utils import read_yaml_file
 from crop_yield.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig
+from crop_yield.cloud.s3_syncer import S3Sync
+from crop_yield.constant.training_pipeline import TRAINING_BUCKET_NAME
 
 
 from crop_yield.entity.artifact_entity import (
@@ -26,6 +28,8 @@ from crop_yield.entity.artifact_entity import (
 class TrainingPipeline:
     def __init__(self):
         self.training_pipeline_config = TrainingPipelineConfig()
+        self.s3_sync = S3Sync()
+        
         
     def start_data_ingestion(self):
         try:
@@ -57,7 +61,7 @@ class TrainingPipeline:
                 data_transformation_config=data_transformation_config
             )
 
-            # ✅ Load schema and pass to transformation
+            #  Load schema and pass to transformation
             schema_config = read_yaml_file(SCHEMA_FILE_PATH)
             data_transformation_artifact = data_transformation.initiate_data_transformation(schema_config=schema_config)
             return data_transformation_artifact
@@ -83,7 +87,27 @@ class TrainingPipeline:
      
         except Exception as e:
             raise CropYieldException(e, sys)
+    ## local artifact is going to s3 bucket    
+    def sync_artifact_dir_to_s3(self):
+        try:
+            aws_bucket_url = f"s3://{TRAINING_BUCKET_NAME}/artifact/{self.training_pipeline_config.timestamp}"
+            self.s3_sync.sync_folder_to_s3(folder = self.training_pipeline_config.artifact_dir,aws_bucket_url=aws_bucket_url)
+        except Exception as e:
+            raise CropYieldException(e,sys)
         
+        
+        
+     ## local final model is going to s3 bucket 
+        
+    def sync_saved_model_dir_to_s3(self):
+        try:
+            aws_bucket_url = f"s3://{TRAINING_BUCKET_NAME}/final_model/{self.training_pipeline_config.timestamp}"
+            self.s3_sync.sync_folder_to_s3(folder = self.training_pipeline_config.model_dir,aws_bucket_url=aws_bucket_url)
+        except Exception as e:
+            raise CropYieldException(e,sys)    
+        
+            
+                
     def run_pipeline(self):
         try:
             data_ingestion_artifact=self.start_data_ingestion()
@@ -91,7 +115,8 @@ class TrainingPipeline:
             data_transformation_artifact=self.start_data_transformation(data_validation_artifact=data_validation_artifact)
             model_trainer_artifact=self.start_model_trainer(data_transformation_artifact=data_transformation_artifact)
             
-            
+            self.sync_artifact_dir_to_s3()
+            self.sync_saved_model_dir_to_s3()
             return model_trainer_artifact
         except Exception as e:
             raise CropYieldException(e,sys)
