@@ -70,3 +70,8 @@ MODEL_TRAINER_OVER_FITTING_UNDER_FITTING_THRESHOLD: float = 0.05
 
 TRAINING_BUCKET_NAME: str = "crop-yield-training-bucket"
 
+MODEL_PUSHER_DIR_NAME: str = "model_pusher"
+MODEL_PUSHER_SAVED_MODEL_DIR: str = os.path.join("final_model")
+
+# OR just for compatibility with your sync logic:
+MODEL_DIR: str = os.path.join("final_model")

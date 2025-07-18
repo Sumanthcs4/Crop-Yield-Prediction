@@ -14,7 +14,7 @@ from crop_yield.constant.training_pipeline import SCHEMA_FILE_PATH
 from crop_yield.utils.main_utils.utils import read_yaml_file
 from crop_yield.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig
 from crop_yield.cloud.s3_syncer import S3Sync
-from crop_yield.constant.training_pipeline import TRAINING_BUCKET_NAME
+from crop_yield.constant.training_pipeline import TRAINING_BUCKET_NAME , MODEL_DIR, MODEL_PUSHER_DIR_NAME, MODEL_PUSHER_SAVED_MODEL_DIR 
 
 
 from crop_yield.entity.artifact_entity import (
@@ -29,6 +29,7 @@ class TrainingPipeline:
     def __init__(self):
         self.training_pipeline_config = TrainingPipelineConfig()
         self.s3_sync = S3Sync()
+        self.model_dir = MODEL_DIR 
         
         
     def start_data_ingestion(self):
