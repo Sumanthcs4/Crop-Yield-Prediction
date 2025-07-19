@@ -1,8 +1,19 @@
-FROM python:3.10-slim-buster
+FROM python:3.10-slim-bookworm
+
+# Set working directory
 WORKDIR /app
+
+# Copy project files
 COPY . /app
 
-RUN apt update -y && apt install awscli -y
+# Install awscli and cleanup to keep image small
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends awscli && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && pip install -r requirements.txt
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Start app
 CMD ["python", "app.py"]
