@@ -3,10 +3,10 @@ FROM python:3.10-slim-bookworm
 # Set working directory
 WORKDIR /app
 
-# Copy project files
+# Copy all files to the container
 COPY . /app
 
-# Install awscli and cleanup to keep image small
+# Install system packages and awscli, clean up
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends awscli && \
     apt-get clean && \
@@ -15,5 +15,5 @@ RUN apt-get update -y && \
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Start app
-CMD ["python", "app.py"]
+# Run FastAPI app with uvicorn
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
