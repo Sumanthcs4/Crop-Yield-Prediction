@@ -87,7 +87,7 @@ jobs:
          
       - name: Stop and remove  container if running
         run: |
-         docker ps -q --filter "name=crop-yield" | grep -q . && docker stop networksecurity && docker rm -fv networksecurity
+         docker ps -q --filter "name=crop-yield" | grep -q . && docker stop crop-yield && docker rm -fv crop-yield
        
       - name: Run Docker Image to serve users
         run: |
