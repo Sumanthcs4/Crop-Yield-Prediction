@@ -12,7 +12,7 @@ pymongo[srv]
 pyaml
 dill
 xgboost
-dagshub
+dagshub==0.3.23
 fastapi
 uvicorn
 streamlit
