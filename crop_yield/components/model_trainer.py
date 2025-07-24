@@ -16,10 +16,10 @@ from crop_yield.logging.logger import logging
 from crop_yield.entity.config_entity import ModelTrainerConfig
 from crop_yield.utils.main_utils.utils import save_object, load_object, load_numpy_array_data, evaluate_models
 from crop_yield.utils.ml_utils.model.estimator import CropYieldModel
-import dagshub
+#import dagshub
 
 # Initialize DagsHub + MLflow
-dagshub.init(repo_owner='Sumanthcs4', repo_name='Crop-Yield-Prediction', mlflow=True)
+#dagshub.init(repo_owner='Sumanthcs4', repo_name='Crop-Yield-Prediction', mlflow=True)
 
 
 class ModelTrainer:
