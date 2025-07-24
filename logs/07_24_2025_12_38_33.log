@@ -1,0 +1,24 @@
+[ 2025-07-24 12:39:10,294] 107 dagshub - INFO - Initialized MLflow to track repo "Sumanthcs4/Crop-Yield-Prediction"
+[ 2025-07-24 12:39:10,295] 107 dagshub - INFO - Repository Sumanthcs4/Crop-Yield-Prediction initialized!
+[ 2025-07-24 12:39:53,558] 33 root - INFO - Start data Ingestion
+[ 2025-07-24 12:40:05,626] 98 root - INFO - Performed train-validation-test split on the DataFrame.
+[ 2025-07-24 12:40:05,771] 107 root - INFO - Exported train, validation, and test file paths.
+[ 2025-07-24 12:40:05,777] 36 root - INFO - Data Ingestion completed and artifact: DataIngestionArtifact(feature_store_file_path='artifacts\\07_24_2025_12_38_52\\data_ingestion\\feature_store\\crop_yield.csv', training_file_path='artifacts\\07_24_2025_12_38_52\\data_ingestion\\ingested\\train.csv', validation_file_path='artifacts\\07_24_2025_12_38_52\\data_ingestion\\ingested\\validation.csv', testing_file_path='artifacts\\07_24_2025_12_38_52\\data_ingestion\\ingested\\test.csv')
+[ 2025-07-24 12:40:05,791] 46 root - INFO - Initiate the data Validation
+[ 2025-07-24 12:40:06,118] 60 root - INFO - Reading validated datasets
+[ 2025-07-24 12:40:06,275] 65 root - INFO - Splitting features and target
+[ 2025-07-24 12:40:06,327] 48 root - INFO - Entered the save_object method of MainUtils class
+[ 2025-07-24 12:40:06,328] 52 root - INFO - Exited the save_object method of MainUtils class
+[ 2025-07-24 12:40:06,328] 87 root - INFO - Fitting and transforming train data
+[ 2025-07-24 12:40:06,446] 93 root - INFO - Combining features with target
+[ 2025-07-24 12:40:06,447] 98 root - INFO - Saving transformed datasets
+[ 2025-07-24 12:40:06,456] 103 root - INFO - Saving preprocessing object
+[ 2025-07-24 12:40:06,456] 48 root - INFO - Entered the save_object method of MainUtils class
+[ 2025-07-24 12:40:06,457] 52 root - INFO - Exited the save_object method of MainUtils class
+[ 2025-07-24 12:40:06,457] 48 root - INFO - Entered the save_object method of MainUtils class
+[ 2025-07-24 12:40:06,459] 52 root - INFO - Exited the save_object method of MainUtils class
+[ 2025-07-24 12:40:06,459] 107 root - INFO - Creating transformation artifact
+[ 2025-07-24 12:40:42,254] 48 root - INFO - Entered the save_object method of MainUtils class
+[ 2025-07-24 12:40:42,335] 52 root - INFO - Exited the save_object method of MainUtils class
+[ 2025-07-24 12:40:42,336] 48 root - INFO - Entered the save_object method of MainUtils class
+[ 2025-07-24 12:40:42,400] 52 root - INFO - Exited the save_object method of MainUtils class
