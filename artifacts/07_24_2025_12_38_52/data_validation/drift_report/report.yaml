@@ -1,0 +1,37 @@
+Area:
+  drift_detected: &id001 !!python/object/apply:numpy._core.multiarray.scalar
+  - !!python/object/apply:numpy.dtype
+    args:
+    - b1
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - '|'
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - !!binary |
+    AA==
+  p_value: 0.9961436093836165
+Item:
+  drift_detected: *id001
+  p_value: 0.43654328590357316
+Year:
+  drift_detected: *id001
+  p_value: 0.3203394636732573
+average_rain_fall_mm_per_year:
+  drift_detected: *id001
+  p_value: 0.5388913658221872
+avg_temp:
+  drift_detected: *id001
+  p_value: 0.8002214834596489
+hg/ha_yield:
+  drift_detected: *id001
+  p_value: 0.6763667799490904
+pesticides_tonnes:
+  drift_detected: *id001
+  p_value: 0.9178895650345735
