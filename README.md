@@ -36,7 +36,7 @@ graph TD
 
     subgraph "Model Training"
         J --> K(Model Trainer)
-        K --> L[Regressor (e.g., RandomForest)]
+        K --> L[Regressor (DecisionTrees, RandomForest, XGBoost)]
         K --> M[Trained Model Artifacts]
     end
 
